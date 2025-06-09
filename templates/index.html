@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Power Demand Predictor</title>
+    <style>
+        input[type="number"] {
+            width: 60px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .temp-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>💡 Power Demand Predictor Naya Baneshwor station(LSTM)</h2>
+    <form method="POST">
+        <label>Prediction Time (e.g. 2024-01-28 23:00):</label><br>
+        <input type="text" name="timestamp" required><br><br>
+
+        <label>Enter past 24 hourly temperatures:</label>
+        <div class="temp-grid">
+            {% for i in range(24) %}
+                <input type="number" name="temp{{ i }}" step="0.1" required placeholder="T{{ i }}">
+            {% endfor %}
+        </div><br>
+
+        <button type="submit">🔍 Predict</button>
+    </form>
+
+    {% if prediction %}
+        <h3>✅ Predicted Demand: {{ prediction }} MW</h3>
+    {% endif %}
+
+    {% if error %}
+        <p style="color: red;">⚠️ Error: {{ error }}</p>
+    {% endif %}
+</body>
+</html>
