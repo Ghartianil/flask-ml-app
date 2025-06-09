@@ -7,10 +7,12 @@ from tensorflow.keras.models import load_model
 app = Flask(__name__)
 
 # Load model and scalers once
-scaler_X = pickle.load(open("G:/data analysis/scaler_X.pkl", "rb"))
-scaler_y = pickle.load(open("G:/data analysis/scaler_y.pkl", "rb"))
-model = load_model("G:/data analysis/lstm_model.h5", compile=False)
+scaler_X = pickle.load(open("scaler_X.pkl", "rb"))
+scaler_y = pickle.load(open("scaler_y.pkl", "rb"))
+import os
 
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "lstm_model.h5")
+model = load_model(MODEL_PATH, compile=False)
 @app.route("/", methods=["GET", "POST"])
 def index():
     prediction = None
@@ -43,4 +45,5 @@ def index():
     return render_template("index.html", prediction=prediction, error=error)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
